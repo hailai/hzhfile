@@ -11,7 +11,7 @@ $(function () {
             })
                 .done(function (pages) {
                     if(pages.st == 1){
-                        $("table[name='jkls'] tbody").load("pages.php");
+                        $(".page-con").load("pages.php");
                     }else{
                         alert("删除失败");
                         console.log(pages.st);
@@ -37,5 +37,17 @@ $(function () {
             $("#blog-block").attr('style','display:block');
         }
     })
+
+    $("#con-list").on("click",".page-list li a",function(){
+        var page = $(this).text();
+        $.ajax({
+            method : 'post',
+            url : 'pages.php',
+            data : {currentPage : page}
+        })
+        .done(function(data){
+            $(".page-con").html(data);
+        });
+    });
     
 })

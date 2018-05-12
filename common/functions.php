@@ -160,13 +160,12 @@ function output_page($page,$perpage=2){
 
 function addItems($title,$label,$content){
     $con = connect_db();
-    $maxid = maxid();
-    $itemid = $maxid + 1;
     if($label == 'photo') {
-        $phitem_ins_sql = 'INSERT INTO huka_items(label,title,likes) VALUES("photo","'.$title.'",0)'; 
+        $phitem_ins_sql = 'INSERT INTO huka_items(label,title,likes) VALUES("photo","'.$title.'",0);'; 
         $con->query($phitem_ins_sql);
         if($con->affected_rows){
-            $ph_ins_sql = 'INSERT INTO huka_photos(item_id,item_photo) VALUES("'.$itemid.'","'.$content.'")';
+            $itemid = maxid();
+            $ph_ins_sql = 'INSERT INTO huka_photos(item_id,item_photo) VALUES("'.$itemid.'","'.$content.'");';
             $con->query($ph_ins_sql);
             if($tt = $con->affected_rows > 0){
                 echo 'ok';
@@ -176,15 +175,19 @@ function addItems($title,$label,$content){
         echo 'wrong';
         return $ph_ins_sql;
     } else {
-        $blitem_ins_sql = 'INSERT INTO huka_items(label,title,likes) VALUES("blog","'.$title.'",0)';
+        $blitem_ins_sql = 'INSERT INTO huka_items(label,title,likes) VALUES("blog","'.$title.'",0);';
         $con->query($blitem_ins_sql);
-        if($con->affected_rows) {
-            $bl_ins_sql = 'INSERT INTO huka_blogs(item_id,item_blog) VALUES("'.$itemid.'","'.$content.'")';
+        if($con->affected_rows > 0) {
+            $itemid = maxid();
+            $bl_ins_sql = 'INSERT INTO huka_blogs(item_id,item_blog) VALUES("'.$itemid.'","'.$content.'");';
             $con->query($bl_ins_sql);
+            echo $con->affected_rows;
             if($con->affected_rows > 0) {
                 return 1;
             }
         }
+        echo $bl_ins_sql;
+        die();
         return 0;
     }
 }
@@ -193,5 +196,25 @@ function now_user(){
     session_start();
     $user = isset($_SESSION['username']) ? $_SESSION['username'] : false;
     return $user;
+}
+
+function page_list($current_page) {
+    $con = connect_db();
+    $count_sql = "select count(*) from `huka_items`;";
+    $rst = $con->query($count_sql)->fetch_row();
+    $total = $rst[0];
+
+    $perPage = PERPAGE;
+    $totalPages = ceil($total/$perPage);
+
+    echo "<ul>";
+    for ($i=1; $i < $totalPages+1; $i++) { 
+        if($i == $current_page) {
+            echo "<li>$i</li>";
+        } else {
+            echo "<li><a href='javascript:void(0);'>$i</a></li>";
+        }
+    }
+    echo "</ul>";
 }
 //others

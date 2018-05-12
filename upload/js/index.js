@@ -103,7 +103,6 @@ $(function () {
         ajax_page(keyword);
     });
 
-
 });
 
 function ajax_page(label){

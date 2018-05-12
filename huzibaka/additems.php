@@ -10,14 +10,14 @@ $now_user = now_user();
     <div id="con-list">
         <form method="post" action="addresult.php" enctype="multipart/form-data">
             <div>标题：<input type="text" name="title"></div>
-            <div>类别：<label><input type="radio" name="label" value="photo" checked>照片</label>
-                <label><input type="radio" name="label" value="blog">文章</label>
+            <div>类别：<label><input type="radio" name="label" value="photo" >照片</label>
+                <label><input type="radio" name="label" value="blog" checked>文章</label>
             </div>
-            <div id="hukaadd_cont">
-                <div id="photo-block">请选择上传<input type="file" name="photo" accept="image/*" >
+            <div id="hukaadd_cont" >
+                <div id="photo-block" style="display:none">请选择上传<input type="file" name="photo" accept="image/*" >
                     <div id="preview"></div>
                 </div>
-                <div id="blog-block" style="display:none">
+                <div id="blog-block" >
                     <textarea id="article-main" name="article-main" placeholder="这里输入博文" ></textarea>
                     <script>
                        var article_main = new Simditor({
